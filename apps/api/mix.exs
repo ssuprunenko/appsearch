@@ -1,8 +1,8 @@
-defmodule AppStore.Mixfile do
+defmodule API.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :app_store,
+    [app: :api,
      version: "0.1.0",
      build_path: "../../_build",
      config_path: "../../config/config.exs",
@@ -19,7 +19,8 @@ defmodule AppStore.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:httpoison, :poison]]
+    [extra_applications: [:cowboy, :plug, :logger],
+     mod: {API.Application, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -37,9 +38,10 @@ defmodule AppStore.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 0.11"},
+      {:cowboy, "~> 1.1"},
+      {:plug, "~> 1.3"},
       {:poison, "~> 3.1"},
-      {:credo, "~> 0.7", only: [:dev, :test]}
+      {:app_store, in_umbrella: true}
     ]
   end
 end
