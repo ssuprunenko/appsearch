@@ -1,12 +1,21 @@
 defmodule AppStore.Search do
-  use HTTPoison.Base
+  @moduledoc """
+  Provides access to iTunes Search API for the Software entity.
 
+  ## Reference
+  https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
+  """
+
+  use HTTPoison.Base
+  alias AppStore.App
+
+  @endpoint "https://itunes.apple.com"
   @limit 10
-  @expected_fields [:artworkUrl60, :trackCensoredName, :trackViewUrl]
 
   def call(term, params \\ %{}) do
     start()
-    case get("search", [], params: process_params(params, term)) do
+
+    case get("/search", [], params: process_params(params, term)) do
       {:ok, %HTTPoison.Response{body: body}} -> body
       {:error, _} -> []
     end
@@ -20,13 +29,12 @@ defmodule AppStore.Search do
   end
 
   def process_url(url) do
-    "https://itunes.apple.com/" <> url
+    @endpoint <> url
   end
 
   def process_response_body(body) do
     body
-    |> Poison.decode!(keys: :atoms)
-    |> Map.get(:results)
-    |> Enum.map(fn(app) -> Map.take(app, @expected_fields) end)
+    |> Poison.decode!(as: %{"results" => [%App{}]})
+    |> Map.get("results")
   end
 end
