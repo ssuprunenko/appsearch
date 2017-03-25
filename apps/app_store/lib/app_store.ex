@@ -1,18 +1,11 @@
 defmodule AppStore do
   @moduledoc """
-  Documentation for AppStore.
+  Provides basic functionalities for iTunes Search API.
   """
 
-  @doc """
-  Hello world.
+  alias AppStore.Search
 
-  ## Examples
-
-      iex> AppStore.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def search(term, params \\ %{}) do
+    Search.call(term, params)
   end
 end
