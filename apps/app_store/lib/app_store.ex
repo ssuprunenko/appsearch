@@ -1,18 +1,7 @@
 defmodule AppStore do
-  @moduledoc """
-  Documentation for AppStore.
-  """
+  alias AppStore.Search
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> AppStore.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def search(term, params \\ %{}) do
+    Search.call(term, params)
   end
 end
