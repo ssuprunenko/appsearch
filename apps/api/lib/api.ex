@@ -16,7 +16,7 @@ defmodule API do
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Poison.encode!(apps))
+    |> send_resp(200, Poison.encode!(apps, fields: conn.params["fields"]))
   end
 
   match _ do
