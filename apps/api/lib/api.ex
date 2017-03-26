@@ -16,6 +16,7 @@ defmodule API do
 
     conn
     |> put_resp_content_type("application/json")
+    |> put_resp_header("cache-control", "public, max-age=86400")
     |> send_resp(200, Poison.encode!(apps, fields: conn.params["fields"]))
   end
 
@@ -25,6 +26,7 @@ defmodule API do
 
     conn
     |> put_resp_content_type("application/json")
+    |> put_resp_header("cache-control", "public, max-age=604800")
     |> send_resp(200, Poison.encode!(app, fields: conn.params["fields"]))
   end
 
