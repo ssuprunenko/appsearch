@@ -19,6 +19,15 @@ defmodule API do
     |> send_resp(200, Poison.encode!(apps, fields: conn.params["fields"]))
   end
 
+  get "/lookup" do
+    conn = fetch_query_params(conn)
+    app = AppStore.lookup(conn.params["id"])
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Poison.encode!(app, fields: conn.params["fields"]))
+  end
+
   match _ do
     send_resp(conn, 404, "Not Found")
   end

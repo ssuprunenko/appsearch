@@ -4,8 +4,13 @@ defmodule AppStore do
   """
 
   alias AppStore.Search
+  alias AppStore.Lookup
 
   def search(term, params \\ %{}) do
     Search.call(term, params)
+  end
+
+  def lookup(id) do
+    Lookup.call(id)
   end
 end
