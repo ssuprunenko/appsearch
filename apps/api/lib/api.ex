@@ -10,7 +10,7 @@ defmodule API do
   plug :match
   plug :dispatch
 
-  get "/search" do
+  get "/itunes/search" do
     conn = fetch_query_params(conn)
     apps = AppStore.search(conn.params["term"], conn.params)
 
@@ -19,7 +19,7 @@ defmodule API do
     |> send_resp(200, Poison.encode!(apps, fields: conn.params["fields"]))
   end
 
-  get "/lookup" do
+  get "/itunes/lookup" do
     conn = fetch_query_params(conn)
     app = AppStore.lookup(conn.params["id"])
 
