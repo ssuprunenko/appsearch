@@ -7,9 +7,8 @@ defmodule AppStore.Search do
   """
 
   use HTTPoison.Base
-  alias AppStore.App
+  use AppStore.API
 
-  @endpoint "https://itunes.apple.com"
   @limit 10
 
   def call(term, params \\ %{}) do
@@ -26,15 +25,5 @@ defmodule AppStore.Search do
     |> Map.put(:term, term)
     |> Map.put(:entity, "software")
     |> Map.put_new(:limit, @limit)
-  end
-
-  def process_url(url) do
-    @endpoint <> url
-  end
-
-  def process_response_body(body) do
-    body
-    |> Poison.decode!(as: %{"results" => [%App{}]})
-    |> Map.get("results")
   end
 end
