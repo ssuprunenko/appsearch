@@ -19,7 +19,7 @@ defmodule API.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:cowboy, :plug, :logger],
+    [extra_applications: [:cowboy, :plug, :logger, :timber],
      mod: {API.Application, []}]
   end
 
@@ -41,7 +41,8 @@ defmodule API.Mixfile do
       {:cowboy, "~> 1.1"},
       {:plug, "~> 1.3"},
       {:poison, "~> 3.1"},
-      {:app_store, in_umbrella: true}
+      {:timber, "~> 1.0"},
+      {:app_store, in_umbrella: true},
     ]
   end
 end
