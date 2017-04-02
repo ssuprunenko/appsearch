@@ -14,7 +14,12 @@ defmodule GooglePlay.Search do
 
     case get("/search", [], params: process_params(params, term)) do
       {:ok, %HTTPoison.Response{body: body}} ->
-        Enum.take(body, params[:limit] || @limit)
+        limit =
+          params
+          |> Map.put_new(:limit, params["limit"] || @limit)
+          |> results_limit
+
+        Enum.take(body, limit)
       {:error, _} -> []
     end
   end
@@ -28,6 +33,15 @@ defmodule GooglePlay.Search do
     |> Floki.find(".card")
     |> Stream.map(fn(app) -> parse(app) end)
   end
+
+  defp results_limit(%{limit: limit}) when is_binary(limit) do
+    case Integer.parse(limit) do
+      {number, ""} -> number
+      :error -> @limit
+    end
+  end
+  defp results_limit(%{limit: limit}) when is_integer(limit), do: limit
+  defp results_limit(_), do: @limit
 
   defp process_params(params, term) do
     params

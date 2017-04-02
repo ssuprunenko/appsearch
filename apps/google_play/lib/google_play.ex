@@ -1,18 +1,11 @@
 defmodule GooglePlay do
   @moduledoc """
-  Documentation for GooglePlay.
+  Provides basic functionalities for Google Play.
   """
 
-  @doc """
-  Hello world.
+  alias GooglePlay.Search
 
-  ## Examples
-
-      iex> GooglePlay.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def search(term, params \\ %{}) do
+    Search.call(term, params)
   end
 end
