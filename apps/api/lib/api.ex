@@ -10,6 +10,12 @@ defmodule API do
   plug :match
   plug :dispatch
 
+  get "/" do
+    conn
+    |> put_resp_header("content-type", "text/html")
+    |> send_file(200, Path.expand("..", __DIR__) <> "/public/index.html")
+  end
+
   get "/itunes/search" do
     conn = fetch_query_params(conn)
     apps = AppStore.search(conn.params["term"], conn.params)
@@ -28,6 +34,16 @@ defmodule API do
     |> put_resp_content_type("application/json")
     |> put_resp_header("cache-control", "public, max-age=604800")
     |> send_resp(200, Poison.encode!(app, fields: conn.params["fields"]))
+  end
+
+  get "/google/search" do
+    conn = fetch_query_params(conn)
+    apps = GooglePlay.search(conn.params["term"], conn.params)
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> put_resp_header("cache-control", "public, max-age=86400")
+    |> send_resp(200, Poison.encode!(apps, fields: conn.params["fields"]))
   end
 
   match _ do
