@@ -20,7 +20,7 @@ defmodule AppStore.Search do
     end
   end
 
-  def process_params(params, term) do
+  defp process_params(params, term) do
     params
     |> Map.put(:term, term)
     |> Map.put(:entity, "software")
