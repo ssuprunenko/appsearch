@@ -10,6 +10,12 @@ defmodule API do
   plug :match
   plug :dispatch
 
+  get "/" do
+    conn
+    |> put_resp_header("content-type", "text/html")
+    |> send_file(200, Path.expand("..", __DIR__) <> "/public/index.html")
+  end
+
   get "/itunes/search" do
     conn = fetch_query_params(conn)
     apps = AppStore.search(conn.params["term"], conn.params)
