@@ -18,10 +18,7 @@ defmodule API do
 
   get "/search" do
     conn = fetch_query_params(conn)
-
-    appstore_apps = AppStore.search(conn.params["term"], conn.params)
-    googleplay_apps = GooglePlay.search(conn.params["term"], conn.params)
-    apps = appstore_apps ++ googleplay_apps
+    apps = API.Apps.search(conn.params["term"], conn.params)
 
     conn
     |> put_resp_content_type("application/json")

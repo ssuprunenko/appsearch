@@ -1,4 +1,8 @@
 defmodule GooglePlay.Lookup do
+  @moduledoc """
+  Provides access to Google Play Lookup.
+  """
+
   use HTTPoison.Base
   alias GooglePlay.App
 
@@ -24,7 +28,11 @@ defmodule GooglePlay.Lookup do
 
   defp parse_content([]), do: %{}
   defp parse_content(content) do
-    id = Floki.attribute(content, ".details-wrapper", "data-docid") |> List.first
+    id =
+      content
+      |> Floki.attribute(".details-wrapper", "data-docid")
+      |> List.first
+
     store_url = "https://play.google.com/store/apps/details?id=" <> id
 
     %App{

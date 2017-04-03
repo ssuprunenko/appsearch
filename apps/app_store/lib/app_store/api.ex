@@ -1,4 +1,8 @@
 defmodule AppStore.API do
+  @moduledoc """
+  Shared module for interact with iTunes Search API
+  """
+
   defmacro __using__(_) do
     quote do
       alias AppStore.App
