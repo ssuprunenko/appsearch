@@ -31,7 +31,7 @@ defmodule GooglePlay.Search do
   def process_response_body(body) do
     body
     |> Floki.find(".card")
-    |> Stream.map(fn(app) -> parse(app) end)
+    |> Stream.map(fn(app) -> parse_content(app) end)
   end
 
   defp results_limit(%{limit: limit}) when is_binary(limit) do
@@ -50,19 +50,18 @@ defmodule GooglePlay.Search do
     |> Map.put_new(:hl, "en")
   end
 
-  defp parse(card) do
-    id = fetch_attr(card, :id)
-    store_url = "https://play.google.com/store/apps/details?id=" <> id
+  defp parse_content(card) do
+    ~w(id title icon description developer rating)a
+    |> Enum.map(&(Task.async(fn -> %{field: &1, value: fetch_attr(card, &1)} end)))
+    |> Enum.map(&Task.await/1)
+    |> Enum.reduce(%App{}, fn(%{field: field, value: value}, acc) ->
+      Map.put(acc, field, value)
+    end)
+    |> fetch_attr(:store_url)
+  end
 
-    %App{
-      id: id,
-      title: fetch_attr(card, :title),
-      store_url: store_url,
-      icon: fetch_attr(card, :icon),
-      description: fetch_attr(card, :description),
-      developer: fetch_attr(card, :developer),
-      rating: fetch_attr(card, :rating)
-    }
+  defp fetch_attr(app, :store_url) do
+    Map.put(app, :store_url, "https://play.google.com/store/apps/details?id=" <> app.id)
   end
 
   defp fetch_attr(card, :id) do
