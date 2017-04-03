@@ -13,7 +13,7 @@ defmodule API do
   get "/" do
     conn
     |> put_resp_header("content-type", "text/html")
-    |> send_file(200, Path.expand("..", __DIR__) <> "/public/index.html")
+    |> send_resp(200, "<h1 style='text-align:center;margin-top:50px;'>Appsearch</h1>")
   end
 
   get "/search" do
