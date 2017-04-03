@@ -18,10 +18,14 @@ defmodule GooglePlay.Lookup do
   end
 
   def process_response_body(body) do
-    id = Floki.attribute(body, ".details-wrapper", "data-docid") |> List.first
-    store_url = "https://play.google.com/store/apps/details?id=" <> id
-
     content = Floki.find(body, ".main-content")
+    parse_content(content)
+  end
+
+  defp parse_content([]), do: %{}
+  defp parse_content(content) do
+    id = Floki.attribute(content, ".details-wrapper", "data-docid") |> List.first
+    store_url = "https://play.google.com/store/apps/details?id=" <> id
 
     %App{
       id: id,
