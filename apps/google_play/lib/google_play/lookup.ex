@@ -28,23 +28,23 @@ defmodule GooglePlay.Lookup do
 
   defp parse_content([]), do: %{}
   defp parse_content(content) do
-    id =
-      content
-      |> Floki.attribute(".details-wrapper", "data-docid")
-      |> List.first
+    ~w(id title icon description developer website rating)a
+    |> Enum.map(&(Task.async(fn -> %{field: &1, value: fetch_attr(content, &1)} end)))
+    |> Enum.map(&Task.await/1)
+    |> Enum.reduce(%App{}, fn(%{field: field, value: value}, acc) ->
+      Map.put(acc, field, value)
+    end)
+    |> fetch_attr(:store_url)
+  end
 
-    store_url = "https://play.google.com/store/apps/details?id=" <> id
+  defp fetch_attr(content, :id) do
+    content
+    |> Floki.attribute(".details-wrapper", "data-docid")
+    |> List.first
+  end
 
-    %App{
-      id: id,
-      title: fetch_attr(content, :title),
-      store_url: store_url,
-      icon: fetch_attr(content, :icon),
-      description: fetch_attr(content, :description),
-      developer: fetch_attr(content, :developer),
-      website: fetch_attr(content, :website),
-      rating: fetch_attr(content, :rating)
-    }
+  defp fetch_attr(app, :store_url) do
+    Map.put(app, :store_url, "https://play.google.com/store/apps/details?id=" <> app.id)
   end
 
   defp fetch_attr(content, :title) do
