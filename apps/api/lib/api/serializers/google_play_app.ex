@@ -4,9 +4,10 @@ defimpl Poison.Encoder, for: GooglePlay.App do
       id: app.id,
       name: app.title,
       url: app.store_url,
-      icon: app.icon_url_340,
+      icon: app.icon,
       description: app.description,
       developer: app.developer,
+      website: app.website,
       store: "Google Play"
     }
 

@@ -7,10 +7,10 @@ defmodule GooglePlay.App do
     id
     title
     store_url
-    icon_url_170
-    icon_url_340
+    icon
     description
     developer
+    website
     rating
   )a
 
@@ -18,10 +18,10 @@ defmodule GooglePlay.App do
     id: integer,
     title: binary,
     store_url: binary,
-    icon_url_170: binary,
-    icon_url_340: binary,
+    icon: binary,
     description: binary,
     developer: binary,
+    website: binary,
     rating: float
   }
 end

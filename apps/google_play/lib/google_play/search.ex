@@ -58,8 +58,7 @@ defmodule GooglePlay.Search do
       id: id,
       title: fetch_attr(card, :title),
       store_url: store_url,
-      icon_url_170: fetch_attr(card, :icon_url_170),
-      icon_url_340: fetch_attr(card, :icon_url_340),
+      icon: fetch_attr(card, :icon),
       description: fetch_attr(card, :description),
       developer: fetch_attr(card, :developer),
       rating: fetch_attr(card, :rating)
@@ -80,18 +79,12 @@ defmodule GooglePlay.Search do
     |> List.first
   end
 
-  defp fetch_attr(card, :icon_url_170) do
-    card
-    |> Floki.attribute(".cover-image", "data-cover-small")
-    |> List.first
-    |> String.replace_prefix("//", "https://")
-  end
-
-  defp fetch_attr(card, :icon_url_340) do
+  defp fetch_attr(card, :icon) do
     card
     |> Floki.attribute(".cover-image", "data-cover-large")
     |> List.first
     |> String.replace_prefix("//", "https://")
+    |> String.replace_suffix("=w340", "")
   end
 
   defp fetch_attr(card, :description) do
