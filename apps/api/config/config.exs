@@ -10,7 +10,8 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :api, key: :value
+config :api,
+  port: String.to_integer(System.get_env("PORT") || "4000")
 #
 # And access this configuration in your application as:
 #
@@ -28,6 +29,3 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
-
-# Import Timber, structured logging
-import_config "timber.exs"

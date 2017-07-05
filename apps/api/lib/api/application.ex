@@ -10,7 +10,9 @@ defmodule API.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
-      Plug.Adapters.Cowboy.child_spec(:http, API, [], [compress: true])
+      Plug.Adapters.Cowboy.child_spec(
+        :http, API, [], [compress: true, port: Application.get_env(:api, :port)]
+      )
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

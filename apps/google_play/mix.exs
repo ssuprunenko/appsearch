@@ -39,7 +39,7 @@ defmodule GooglePlay.Mixfile do
     [
       {:httpoison, "~> 0.11"},
       {:poison, "~> 3.1"},
-      {:floki, "~> 0.15.0"},
+      {:floki, "~> 0.15"},
       {:credo, "~> 0.7", only: [:dev, :test]}
     ]
   end
