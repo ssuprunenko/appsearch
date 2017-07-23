@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AppSearch</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.0.0/dist/vue-multiselect.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.4/css/tachyons.min.css">
+  <style>
+    .pre-wrap { white-space: pre-wrap; }
+    .word-break-word { word-break: break-word; }
+    .multiselect__content {
+      width: 100%;
+    }
+    .multiselect__option {
+      display: flex;
+      align-items: center;
+    }
+    .multiselect__option--highlight {
+      background: #96ccff;
+    }
+    .multiselect__content-wrapper {
+      max-height: 340px !important;
+    }
+    .app-description {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body class="sans-serif bg-white">
+  <main>
+    <div class="w-100 mw7 center pv3 pv4-l">
+      <form class="bg-light-blue pa4 mt0 mt5-l br2-ns ba b--black-10">
+        <fieldset class="cf bn ma0 pa0">
+          <!-- <legend class="pa0 f5 f4-ns mb3 black-80">Sign up for our newsletter</legend> -->
+          <div class="cf">
+            <label class="clip" for="name">App Name</label>
+            <multiselect
+              v-model="selectedApp"
+              track-by="id"
+              label="name"
+              placeholder="Select one"
+              :allow-empty="false"
+              :internal-search="false"
+              :loading="isLoading"
+              :options="apps"
+              :searchable="true"
+              :show-no-results="false"
+              :option-height="56"
+              :max-height="340"
+              :show-labels="false"
+              @search-change="asyncFind"
+              class="f6 f5-l black-80 bg-white lh-solid w-100 br2"
+            >
+              <template slot="option" scope="props">
+                <div class="w2">
+                  <img :src="props.option.icon" :alt="props.option.name" class="db br2 w2 h2">
+                </div>
+                <div class="ph2 app-description lh-copy">{{ props.option.name }}</div>
+                <div class="tr f6">{{ props.option.store }}</div>
+              </template>
+            </multiselect>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="mt3 tl" v-if="selectedApp">
+        <pre class="ba br2 b--black-10 bg-white-20 f6 pa2">
+          <code class="pre-wrap word-break-word">
+{{ selectedApp }}</code>
+        </pre>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-multiselect@2.0.0/dist/vue-multiselect.min.js"></script>
+  <script>
+    const Multiselect = window.VueMultiselect.Multiselect
+
+    new Vue({
+      el: 'main',
+      data: {
+        selectedApp: null,
+        apps: [],
+        isLoading: false
+      },
+      methods: {
+        asyncFind (query) {
+          this.isLoading = true
+
+          url = "search?limit=3&term=" + query
+          const myRequest = new Request(url)
+
+          let that = this
+          fetch(myRequest).then(function (response) {
+            return response.json()
+          }).then(function (response) {
+            that.apps = response
+            that.isLoading = false
+          })
+        }
+      },
+      components: {
+        multiselect: Multiselect
+      }
+    })
+  </script>
+</body>
+</html>

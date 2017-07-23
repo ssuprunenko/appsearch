@@ -4,16 +4,15 @@ defmodule API do
   """
 
   use Plug.Router
-  require Logger
 
-  plug Plug.Logger
+  plug Logster.Plugs.Logger
   plug :match
   plug :dispatch
 
   get "/" do
     conn
-    |> put_resp_header("content-type", "text/html")
-    |> send_resp(200, "<h1 style='text-align:center;margin-top:50px;'>Appsearch</h1>")
+    |> put_resp_header("content-type", "text/html; charset=utf-8")
+    |> Plug.Conn.send_file(200, "index.html")
   end
 
   get "/search" do
