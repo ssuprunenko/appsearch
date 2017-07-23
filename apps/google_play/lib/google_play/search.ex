@@ -100,13 +100,20 @@ defmodule GooglePlay.Search do
   end
 
   defp fetch_attr(card, :rating) do
-    card
-    |> Floki.attribute(".current-rating", "style")
-    |> List.first
-    |> String.replace(~r/width: |%;/, "")
-    |> Float.parse
-    |> elem(0)
-    |> Kernel.*(0.05)
-    |> Float.round(3)
+    width =
+      card
+      |> Floki.attribute(".current-rating", "style")
+      |> List.first
+
+    case width do
+      nil -> nil
+      _ ->
+        width
+        |> String.replace(~r/width: |%;/, "")
+        |> Float.parse
+        |> elem(0)
+        |> Kernel.*(0.05)
+        |> Float.round(3)
+    end
   end
 end

@@ -8,6 +8,7 @@ defimpl Poison.Encoder, for: GooglePlay.App do
       description: app.description,
       developer: app.developer,
       website: app.website,
+      rating: app.rating,
       store: "Google Play"
     }
 
